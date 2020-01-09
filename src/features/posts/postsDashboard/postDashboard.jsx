@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Grid, Button } from "semantic-ui-react";
 import PostList from "../postList/PostList";
-import EventForm from "../eventForm/EventForm";
-
+import PostForm from "../postForm/postForm";
+import cuid from "cuid";
 const postsFromDashboard = [
   {
     id: "1",
@@ -48,19 +48,24 @@ const postsFromDashboard = [
 
 export default class postDashboard extends Component {
   state = {
-    posts:postsFromDashboard ,
+    posts: postsFromDashboard,
     isOpen: false
   };
-  handleOpenForm=()=>{
-    this.setState(({isOpen})=>({
-      isOpen:!isOpen
-    })
-
-    )
-    
-  }
+  handleOpenForm = () => {
+    this.setState(({ isOpen }) => ({
+      isOpen: !isOpen
+    }));
+  };
+  handleCreatePost = newPost => {
+    newPost.id = cuid();
+    newPost.hostPhotoURL = "/assets/user.jpg";
+    this.setState(({ posts }) => ({
+      posts: [...posts, newPost],
+      isOpen:false
+    }));
+  };
   render() {
-    const {posts,isOpen}=this.state;
+    const { posts, isOpen } = this.state;
     return (
       <Grid>
         <Grid.Column width={10}>
@@ -68,8 +73,12 @@ export default class postDashboard extends Component {
         </Grid.Column>
         <Grid.Column width={6}>
           <Button onClick={this.handleOpenForm} positive content="Post Tip" />
-          {isOpen &&<EventForm cancelOpenForm={this.handleOpenForm}/> }
-          
+          {isOpen && (
+            <PostForm
+              createPost={this.handleCreatePost}
+              cancelOpenForm={this.handleOpenForm}
+            />
+          )}
         </Grid.Column>
       </Grid>
     );

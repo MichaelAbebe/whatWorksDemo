@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Menu, Container, Button } from "semantic-ui-react";
+import { Menu, Container, Button,Image } from "semantic-ui-react";
 
 export default class NavBar extends Component {
   render() {
@@ -7,7 +7,7 @@ export default class NavBar extends Component {
       <Menu inverted fixed="top">
         <Container>
           <Menu.Item header>
-            <img src="Assets/logo.png" alt="logo" />
+            <Image size="mini" src="Assets/logo.png" alt="logo" />
            whatWorks
           </Menu.Item>
           <Menu.Item name="Tips" />
