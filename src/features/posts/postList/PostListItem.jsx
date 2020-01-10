@@ -1,9 +1,17 @@
 import React, { Component } from "react";
 import { Segment, Item, Icon, List, Button } from "semantic-ui-react";
-import EventListAttendee from "./Comments";
+import Comments from "./Comments";
 export default class PostListItem extends Component {
+  state = {
+    showComment: false
+  };
+
+  HandleShowComment=()=> {
+    console.log("in");
+    this.setState({ showComment: true });
+  }
   render() {
-    const { post } = this.props;
+    const { post,deletePost,selectPost  } = this.props;
     return (
       <Segment.Group>
         <Segment>
@@ -27,16 +35,35 @@ export default class PostListItem extends Component {
 
         <Segment clearing>
           <span>{post.description} </span>
-          <Button as="a" color="teal" floated="right" content="View" />
+          
         </Segment>
-        <Segment secondary>
-          <List>
-            {post.comments &&
-              post.comments.map(comment => (
-                <EventListAttendee key={comment.id} comment={comment} />
-              ))}
-          </List>
-        </Segment>
+        <Segment clearing>
+        <Button
+             onClick={()=>deletePost(post.id) }
+           size='mini'
+            as="a"
+            color="red"
+            floated="right"
+            content="Delete"
+          />
+          <Button
+             onClick={()=>selectPost(post) }
+           size='mini'
+            as="a"
+            color="teal"
+            floated="right"
+            content="Edit"
+          />
+          </Segment>
+          <Segment secondary>
+            <List>
+              {post.comments &&
+                post.comments.map(comment => (
+                  <Comments key={comment.id} comment={comment} />
+                ))}
+            </List>
+          </Segment>
+       
       </Segment.Group>
     );
   }

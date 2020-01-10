@@ -1,19 +1,38 @@
 import React, { Component } from "react";
 import { Segment, Form, Button } from "semantic-ui-react";
 
+const options = [
+  { key: "u", text: "Bullish", value: "Bullish" },
+  { key: "d", text: "Bearish", value: "Bearish" }
+];
+
 export default class PostForm extends Component {
   state = {
+    forcast: "",
     ticker: "",
     catalyst: "",
     date: "",
     description: ""
   };
+
+  componentDidMount(){
+    if(this.props.selectedPost !== null){
+    this.setState({
+      ...this.props.selectedPost
+    })
+  }
+}
+
+
+
   handleFormSubmit = evt => {
     evt.preventDefault();
-    console.log(this.state)
-     this.props.createPost(this.state)
-    
-    
+    if(this.state.id){
+      this.props.updatedPost(this.state);
+    }else{
+      this.props.createPost(this.state)
+    }
+        
   };
 
   handleChange = evt => {
@@ -23,10 +42,22 @@ export default class PostForm extends Component {
   };
   render() {
     const { cancelOpenForm } = this.props;
-    const { ticker, catalyst, date, description } = this.state;
+    const { forcast,ticker, catalyst, date, description } = this.state;
     return (
       <Segment>
         <Form onSubmit={this.handleFormSubmit} autoComplete="off">
+          <Form.Field>
+            <label>Forcast</label>
+            <Form.Select
+              fluid
+              name="forcast"
+              lable="Forcast"
+              placeholder="Select Forcast "
+              value={forcast}
+              options={options}
+              onClick={this.handleChange}
+            />
+          </Form.Field>
           <Form.Field>
             <label>Ticker</label>
             <input
@@ -57,7 +88,12 @@ export default class PostForm extends Component {
           </Form.Field>
           <Form.Field>
             <label>Discription</label>
-          <textarea name='description' onChange={this.handleChange} value={description} placeholder="Description"/>
+            <textarea
+              name="description"
+              onChange={this.handleChange}
+              value={description}
+              placeholder="Description"
+            />
           </Form.Field>
           <Button positive type="submit">
             Submit
