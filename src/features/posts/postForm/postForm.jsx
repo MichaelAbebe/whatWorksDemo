@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import { Segment, Form, Button } from "semantic-ui-react";
+import { Segment, Form, Button, select } from "semantic-ui-react";
+import { connect } from "react-redux";
 
-const options = [
-  { key: "u", text: "Bullish", value: "Bullish" },
-  { key: "d", text: "Bearish", value: "Bearish" }
-];
+const mapStateToProps = (state, ownProps) => {
+  const postId = ownProps.match.params.id;
 
-export default class PostForm extends Component {
-  state = {
+  let post = {
     forcast: "",
     ticker: "",
     catalyst: "",
@@ -15,24 +13,29 @@ export default class PostForm extends Component {
     description: ""
   };
 
-  componentDidMount(){
-    if(this.props.selectedPost !== null){
-    this.setState({
-      ...this.props.selectedPost
-    })
+  if (postId && state.posts.length > 0) {
+    post = state.posts.filter(post => post.id === postId)[0];
   }
-}
+  return { post };
+};
+class PostForm extends Component {
+  state = { ...this.props.post };
 
-
+  componentDidMount() {
+    if (this.props.selectedPost !== null) {
+      this.setState({
+        ...this.props.selectedPost
+      });
+    }
+  }
 
   handleFormSubmit = evt => {
     evt.preventDefault();
-    if(this.state.id){
+    if (this.state.id) {
       this.props.updatedPost(this.state);
-    }else{
-      this.props.createPost(this.state)
+    } else {
+      this.props.createPost(this.state);
     }
-        
   };
 
   handleChange = evt => {
@@ -41,22 +44,24 @@ export default class PostForm extends Component {
     });
   };
   render() {
-    const { cancelOpenForm } = this.props;
-    const { forcast,ticker, catalyst, date, description } = this.state;
+    
+
+    const { ticker, catalyst, date, description } = this.state;
+
     return (
       <Segment>
         <Form onSubmit={this.handleFormSubmit} autoComplete="off">
           <Form.Field>
             <label>Forcast</label>
-            <Form.Select
-              fluid
+            <select
               name="forcast"
-              lable="Forcast"
-              placeholder="Select Forcast "
-              value={forcast}
-              options={options}
-              onClick={this.handleChange}
-            />
+              onChange={this.handleChange}
+              value={this.state.forcast}
+            >
+              <option value="">Select Forcast</option>
+              <option value="Bullish">Bullish</option>
+              <option value="Bearish">Bearish</option>
+            </select>
           </Form.Field>
           <Form.Field>
             <label>Ticker</label>
@@ -98,7 +103,7 @@ export default class PostForm extends Component {
           <Button positive type="submit">
             Submit
           </Button>
-          <Button type="button" onClick={cancelOpenForm}>
+          <Button type="button" onClick={this.props.history.goBack}>
             Cancel
           </Button>
         </Form>
@@ -106,3 +111,4 @@ export default class PostForm extends Component {
     );
   }
 }
+export default connect(mapStateToProps)(PostForm);

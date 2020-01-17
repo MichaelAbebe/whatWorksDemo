@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { Segment, Item, Icon, List, Button } from "semantic-ui-react";
-import Comments from "./Comments";
+
+import { Link } from "react-router-dom";
+import Participants from "./Participant";
 export default class PostListItem extends Component {
   state = {
     showComment: false
   };
 
-  HandleShowComment=()=> {
+  HandleShowComment = () => {
     console.log("in");
     this.setState({ showComment: true });
-  }
+  };
   render() {
-    const { post,deletePost,selectPost  } = this.props;
+    const { post, deletePost } = this.props;
     return (
       <Segment.Group>
         <Segment>
@@ -21,8 +23,9 @@ export default class PostListItem extends Component {
 
               <Item.Content>
                 <Item.Header>{post.ticker}</Item.Header>
-                <Item.Description>Tiped by {post.hostedBy}</Item.Description>
-                <Item.Description>Catalyst {post.catalyst}</Item.Description>
+                <Item.Description>Tiped by: {post.hostedBy}</Item.Description>
+                <Item.Description>Catalyst: {post.catalyst}</Item.Description>
+                <Item.Description>Forcast: {post.forcast}</Item.Description>
               </Item.Content>
             </Item>
           </Item.Group>
@@ -35,35 +38,35 @@ export default class PostListItem extends Component {
 
         <Segment clearing>
           <span>{post.description} </span>
-          
         </Segment>
         <Segment clearing>
-        <Button
-             onClick={()=>deletePost(post.id) }
-           size='mini'
+          <Button
+            onClick={() => deletePost(post.id)}
+            size="mini"
             as="a"
             color="red"
             floated="right"
             content="Delete"
           />
+     
           <Button
-             onClick={()=>selectPost(post) }
-           size='mini'
-            as="a"
+            
+            size="mini"
+            as={Link}
+            to={`/posts/${post.id}`}
             color="teal"
             floated="right"
-            content="Edit"
+            content="Join"
           />
-          </Segment>
-          <Segment secondary>
-            <List>
-              {post.comments &&
-                post.comments.map(comment => (
-                  <Comments key={comment.id} comment={comment} />
-                ))}
-            </List>
-          </Segment>
-       
+        </Segment>
+        <Segment secondary>
+          <List>
+            {post.participant &&
+              post.participant.map(participant => (
+                <Participants key={participant.id} comment={participant} />
+              ))}
+          </List>
+        </Segment>
       </Segment.Group>
     );
   }

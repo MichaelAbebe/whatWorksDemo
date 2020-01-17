@@ -18,7 +18,7 @@ const homePage = ({ history }) => {
             alt="logo"
             style={{ marginBottom: 12 }}
           />
-          WhatWorks
+          whatWorks
         </Header>
         <Button onClick={() => history.push("/posts")} size="huge" inverted>
           Get started

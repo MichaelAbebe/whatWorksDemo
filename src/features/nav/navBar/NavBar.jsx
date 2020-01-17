@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import { Menu, Container, Button, Image } from "semantic-ui-react";
-import { NavLink, Link,withRouter } from "react-router-dom";
+import { NavLink, Link, withRouter } from "react-router-dom";
 import { SignedOut } from "../Menus/SignedOut";
 import { SignedIn } from "../Menus/SignedIn";
 
- class NavBar extends Component {
+class NavBar extends Component {
   state = {
     authenticated: false
   };
   handleSignIn = () => this.setState({ authenticated: true });
   handleSignOut = () => {
-    this.setState({ 
-      authenticated: false });
-      this.props.history.push('/');
+    this.setState({
+      authenticated: false
+    });
+    this.props.history.push("/");
   };
   render() {
     const { authenticated } = this.state;
@@ -23,8 +24,10 @@ import { SignedIn } from "../Menus/SignedIn";
             <Image size="mini" src="Assets/logo.png" alt="logo" />
             whatWorks
           </Menu.Item>
-          <Menu.Item as={NavLink} to="/posts" name="Tips" />
+          <Menu.Item as={NavLink} exact to="/posts" name="Tips" />
           <Menu.Item as={NavLink} to="/people" name="people" />
+          <Menu.Item as={NavLink} to="/test" name="Test" />
+
           <Menu.Item>
             <Button
               as={Link}
@@ -45,4 +48,4 @@ import { SignedIn } from "../Menus/SignedIn";
     );
   }
 }
-export default withRouter(NavBar)
+export default withRouter(NavBar);
